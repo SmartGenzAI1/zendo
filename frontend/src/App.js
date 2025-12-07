@@ -1,47 +1,93 @@
-// src/App.js
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
-import Dashboard from './pages/Dashboard';
-import Tasks from './pages/Tasks';
-import Chat from './pages/Chat';
-import Settings from './pages/Settings';
-import Sidebar from './components/Sidebar';
-import Header from './components/Header';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 function App() {
+  const [message, setMessage] = useState('');
+  const [response, setResponse] = useState('');
+
+  const askZabar = async () => {
+    try {
+      const res = await axios.post(
+        'https://zendo-backend-a0hj.onrender.com/api/chat',
+        { message }
+      );
+      setResponse(res.data.response);
+    } catch (error) {
+      setResponse('Zabar is waking up... try again in 30 seconds');
+    }
+  };
+
   return (
-    <Router>
-      <div className="min-h-screen bg-gradient-to-br from-saffron-50 to-snow-500">
-        <div className="flex">
-          {/* Sidebar */}
-          <Sidebar />
-          
-          {/* Main Content */}
-          <div className="flex-1">
-            <Header />
-            <main className="p-6">
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/tasks" element={<Tasks />} />
-                <Route path="/chat" element={<Chat />} />
-                <Route path="/settings" element={<Settings />} />
-              </Routes>
-            </main>
-          </div>
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #FF9933 0%, #B4161B 100%)',
+      padding: '40px',
+      fontFamily: 'Arial, sans-serif'
+    }}>
+      <div style={{
+        maxWidth: '600px',
+        margin: '0 auto',
+        background: 'white',
+        borderRadius: '20px',
+        padding: '40px',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+      }}>
+        <h1 style={{ color: '#FF9933', textAlign: 'center' }}>
+          🌸 Zendo - Zabar AI Assistant
+        </h1>
+        
+        <div style={{
+          marginTop: '30px',
+          padding: '20px',
+          background: '#FFF5E6',
+          borderRadius: '10px',
+          minHeight: '100px'
+        }}>
+          <strong>Zabar:</strong> {response || 'Salaam! Ask me anything...'}
         </div>
-        <Toaster 
-          position="top-right"
-          toastOptions={{
-            className: 'bg-saffron-100 text-shikara-800 border border-saffron-300',
-            style: {
+
+        <div style={{ marginTop: '20px' }}>
+          <input
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your message..."
+            style={{
+              width: '100%',
+              padding: '15px',
+              borderRadius: '10px',
+              border: '2px solid #FF9933',
+              fontSize: '16px'
+            }}
+          />
+          
+          <button
+            onClick={askZabar}
+            style={{
+              marginTop: '15px',
+              width: '100%',
+              padding: '15px',
               background: 'linear-gradient(135deg, #FF9933 0%, #B4161B 100%)',
               color: 'white',
-            },
-          }}
-        />
+              border: 'none',
+              borderRadius: '10px',
+              fontSize: '18px',
+              cursor: 'pointer'
+            }}
+          >
+            Ask Zabar
+          </button>
+        </div>
+
+        <div style={{
+          marginTop: '30px',
+          textAlign: 'center',
+          color: '#666',
+          fontSize: '14px'
+        }}>
+          Connected to: https://zendo-backend-a0hj.onrender.com
+        </div>
       </div>
-    </Router>
+    </div>
   );
 }
 
