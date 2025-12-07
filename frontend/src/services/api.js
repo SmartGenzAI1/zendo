@@ -8,8 +8,7 @@ export const askZabar = async (message) => {
     return response.data.response || "I'm here to help!";
   } catch (error) {
     console.error('API Error:', error);
-    
-    // Fallback responses if backend is sleeping (free tier)
+    // Fallback responses
     const fallbacks = {
       hello: "Salaam! I'm Zabar, your Kashmiri AI assistant. How can I help? 🌸",
       help: "I can: 1) Manage tasks 2) Create schedules 3) Set reminders 4) Give suggestions",
