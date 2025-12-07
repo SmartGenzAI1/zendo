@@ -1,2 +1,1 @@
-# Create runtime.txt in backend folder
 python-3.11.0
